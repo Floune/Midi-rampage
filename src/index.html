@@ -28,12 +28,80 @@
         margin: 0;
         background-color: #000000;
       }
+      #controls.opened {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 10em;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #ffffff;
+        font-size: 2em;
+        text-align: center;
+        padding-top: 10%;
+      }
+      #controls.closed {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 1em;
+        height: 2em;
+        background-color: rgba(0, 0, 0, 0);
+        color: #ffffff;
+        font-size: 2em;
+        text-align: center;
+
+
+      }
+      #inner {
+        display: none;
+      }
+      #close {
+        display: none;
+      }
     </style>
 
     <noscript>Please enable javascript to continue using this application.</noscript>
   </head>
   <body>
     <div id="phaser-game"></div>
+    <div id="controls" class="closed">
+      <button id="close">X</button>
+      <button id="open">?</button>
+      
+      <div id="inner">
+        Synth
+        <div id="synth">
+          <button synth="osc">Osc</button>
+          <button synth="am">AM</button>
+          <button synth="fm">FM</button>
+        </div>
+
+      </div>
+    </div>
     <script src="./index.js"></script>
+    <script>
+      const open = document.getElementById('open');
+      const close = document.getElementById('close');
+      const controls = document.getElementById('controls');
+      const controlsInner = document.getElementById('inner');
+      
+      open.addEventListener('click', () => {
+        controls.classList.remove('closed');
+        controls.classList.add('opened');
+        controlsInner.style.display = 'block';
+        open.style.display = 'none';
+        close.style.display = 'block';
+      });
+
+      close.addEventListener('click', () => {
+        controls.classList.remove('opened');
+        controls.classList.add('closed');
+        controlsInner.style.display = 'none';
+        open.style.display = 'block';
+        close.style.display = 'none';
+      });
+
+    </script>
   </body>
 </html>

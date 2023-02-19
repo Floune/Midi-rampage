@@ -2,25 +2,43 @@ import { MIDIValInput } from '@midival/core'
 import { FPSText } from '@objects/debug'
 import * as Tone from 'tone';
 
+const allNotes = [
+  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", 
+  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", 
+  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+];
+
 export class MainScene extends Phaser.Scene {
   fpsText: Phaser.GameObjects.Text
   noteText: Phaser.GameObjects.Text
   w: any
   b: any
   touches: any
-  history = []
+  history : string[] = []
+  synth: any
+  currSynth: any = "fm"
 
   constructor() {
     super({ key: 'main-scene' })
+    
   }
 
   async create(data) {
     this.fpsText = new FPSText(this)
-
-    
-    console.log('audio is ready')
-    
-    const synth = new Tone.Synth().toDestination();
+    this.synth = {
+      osc: new Tone.Synth().toDestination(),
+      am: new Tone.AMSynth().toDestination(),
+      fm: new Tone.FMSynth().toDestination(),
+    }
+    document.querySelectorAll("[synth]").forEach((el: any) => {
+      console.log(el)
+      el.addEventListener("click", (ev) => {
+        const name = ev.target.getAttribute("synth")
+        this.currSynth = name;
+        console.log(name + " selected")
+      })
+    })
+   
     const input = new MIDIValInput(data.device);
     
     input.onAllNoteOn(event => {
@@ -32,7 +50,7 @@ export class MainScene extends Phaser.Scene {
       const overlay = this.add.rectangle(pos.touchOffset, 300, w, h, 0xff0000, 0.5);
       overlay.setOrigin(0, 0);
       const name = n.noteName + n.octave;
-      synth.triggerAttackRelease(name, "8n");
+      this.synth[this.currSynth].triggerAttackRelease(name, "8n");
       this.history.push(name);
       this.tweens.add({
           targets: overlay,
@@ -67,14 +85,9 @@ export class MainScene extends Phaser.Scene {
     pianoRoll.fillStyle(0x00ff00, 1);
     pianoRoll.fillRect(0, 0, 1800, 1000);
 
-    const notes = [
-      "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", 
-      "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", 
-      "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-    ];
     let offset = 0;
 
-    this.touches = notes.map((note, index) => {
+    this.touches = allNotes.map((note, index) => {
       const isBlack = note.endsWith("#");
       offset += (isBlack) ? 0 : 50;
       const touchOffset = (isBlack) ? offset + 30 : offset;
@@ -89,7 +102,7 @@ export class MainScene extends Phaser.Scene {
 
     const w = this.touches.filter(t => !t.isBlack); 
     const b = this.touches.filter(t => t.isBlack); 
-    console.log(w,b)
+
     w.forEach(t => {
       wRoll.fillStyle(0xffffff, 1);
       wRoll.fillRect(t.touchOffset, y, 50, 200);
