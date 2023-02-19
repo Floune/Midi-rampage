@@ -6,16 +6,14 @@ export class ConfigScene extends Phaser.Scene {
   constructor() {
     super({ key: 'config-scene' })
     console.log(this)
-    //this.width = window.innerWidth
-    //this.heiht = window.innerHeight
   }
 
   create() {
     console.log("all", this.allDevices)
     // ts-ignore
     window.allDevices.forEach((device, index) => {
-        const text = this.add.text(100, index * 100 + 100, '', { font: '64px Courier', fill: '#00ff00' }).setInteractive();
-
+        const text = this.add.text(575, index * 100 + 100, '', { font: '64px Courier', fill: '#00ff00' }).setInteractive();
+        text.setOrigin(0.5)
         text.setText([
             device.name,
         ]);

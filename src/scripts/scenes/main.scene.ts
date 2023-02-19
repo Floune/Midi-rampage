@@ -16,7 +16,7 @@ export class MainScene extends Phaser.Scene {
   touches: any
   history : string[] = []
   synth: any
-  currSynth: any = "fm"
+  currSynth: any = "poly"
 
   constructor() {
     super({ key: 'main-scene' })
@@ -29,6 +29,7 @@ export class MainScene extends Phaser.Scene {
       osc: new Tone.Synth().toDestination(),
       am: new Tone.AMSynth().toDestination(),
       fm: new Tone.FMSynth().toDestination(),
+      poly: new Tone.PolySynth(Tone.Synth).toDestination(),
     }
     document.querySelectorAll("[synth]").forEach((el: any) => {
       console.log(el)
