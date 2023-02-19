@@ -20,7 +20,7 @@ export class MainScene extends Phaser.Scene {
     
     console.log('audio is ready')
     
-    const synth = new Tone.Synth().toDestination();
+    const synth = new Tone.PolySynth(Tone.Synth).toDestination();
     const input = new MIDIValInput(data.device);
     
     input.onAllNoteOn(event => {
