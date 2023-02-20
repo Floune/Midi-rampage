@@ -4,6 +4,7 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create() {
+    console.log('prout');
     this.scene.start('config-scene');
   }
 }

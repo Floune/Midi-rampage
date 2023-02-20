@@ -1,6 +1,7 @@
 import { MIDIValInput } from '@midival/core';
 import { FPSText } from '@objects/debug';
 import * as Tone from 'tone';
+import { Piano } from '@objects/piano';
 
 const allNotes = [
   'C',
@@ -60,12 +61,13 @@ export class MainScene extends Phaser.Scene {
     poly: Tone.PolySynth;
   };
   currSynth: any = 'poly';
-
+  piano: Piano;
   constructor() {
     super({ key: 'main-scene' });
   }
 
   async create(data) {
+    this.piano = new Piano({ scene: this, x: 100, y: 100 });
     this.fpsText = new FPSText(this);
     this.synth = {
       osc: new Tone.Synth().toDestination(),
