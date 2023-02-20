@@ -1,1 +1,1 @@
-export { FPSText } from './fpsText'
+export { FPSText } from './fpsText';

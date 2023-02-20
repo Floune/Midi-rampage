@@ -1,7 +1,6 @@
-import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from './constants'
+import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from './constants';
 
-import scenes from '@scenes/index'
-
+import scenes from '@scenes/index';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -18,8 +17,8 @@ const config: Phaser.Types.Core.GameConfig = {
     parent: 'phaser-game',
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 1150,
-    height: 500
+    width: DEFAULT_HEIGHT,
+    height: DEFAULT_WIDTH
   },
   physics: {
     default: 'arcade',
@@ -28,6 +27,6 @@ const config: Phaser.Types.Core.GameConfig = {
       gravity: { y: 0 }
     }
   }
-}
+};
 
-export default config
+export default config;

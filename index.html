@@ -9,9 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <meta name="theme-color" content="#000000" />
-
-    <link rel="manifest" href="./manifest.json" />
-
+    
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="application-name" content="midi" />
@@ -61,7 +59,6 @@
       }
     </style>
 
-    <noscript>Please enable javascript to continue using this application.</noscript>
   </head>
   <body>
     <div id="phaser-game"></div>
@@ -80,7 +77,7 @@
 
       </div>
     </div>
-    <script src="./index.js"></script>
+    <script type="module" src="src/index.ts"></script>
     <script>
       const open = document.getElementById('open');
       const close = document.getElementById('close');
