@@ -4,6 +4,7 @@ type PianoKeyType = {
   y: number;
   options?: Phaser.Types.GameObjects.Graphics.Options | undefined;
   value: Notes;
+  sharp: boolean;
 };
 
 export type Notes =
@@ -20,23 +21,23 @@ export type Notes =
   | 'A#'
   | 'B';
 
-export default class PianoTouch extends Phaser.GameObjects.Graphics {
+export default class PianoTouch extends Phaser.GameObjects.Sprite {
   private _value: Notes;
-  private _sharp: boolean;
+  private readonly _sharp: boolean;
 
-  constructor({ scene, x, y, options, value }: PianoKeyType) {
-    super(scene, options);
+  constructor({ scene, x, y, value, sharp }: PianoKeyType) {
+    super(scene, x, y, sharp ? 'piano_key_sharp' : 'piano_key');
     this._value = value;
-    this._sharp = this.isSharp();
-    this.fillStyle(0xffffff, 1.0);
-    this.fillRect(x, y, 400, 200);
-  }
+    this._sharp = sharp;
 
-  isSharp() {
-    return this._value.endsWith('#');
+    scene.add.existing(this);
   }
 
   get sharp(): boolean {
     return this._sharp;
+  }
+
+  protected preUpdate(time: number, delta: number) {
+    super.preUpdate(time, delta);
   }
 }
