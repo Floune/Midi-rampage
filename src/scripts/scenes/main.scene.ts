@@ -50,14 +50,25 @@ export class MainScene extends Phaser.Scene {
     const input = new MIDIValInput(data.device);
 
     input.onAllNoteOn((event) => {
-      console.log(event);
-      const { value: note, octave } = this.piano.getKey(
-        event.note
-      ) as PianoTouch;
-      const name = note + octave;
-      console.log({ note, octave, name });
+      const key = this.piano.getKey(event.note);
+      if (!key) return;
+
+      const name = key.value + key.octave;
       this.synth[this.currSynth].triggerAttackRelease(name, '8n');
+
       this.history.push(name);
+      this.tweens.add({
+        targets: key,
+        alpha: 1,
+        duration: 100,
+        ease: 'Power1',
+        onStart: () => {
+          key.setTint(0xa00101);
+        },
+        onComplete: () => {
+          key.clearTint();
+        }
+      });
     });
 
     this.noteText = this.add.text(0, 50, 'hey', {
