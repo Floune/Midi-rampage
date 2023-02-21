@@ -1,5 +1,6 @@
 import PianoTouch from './PianoTouch';
 import { Notes } from './PianoTouch';
+import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@game/constants';
 export class Piano extends Phaser.GameObjects.Container {
   declare list: PianoTouch[] & Phaser.GameObjects.GameObject[];
   notes: Notes[] = [
@@ -30,6 +31,17 @@ export class Piano extends Phaser.GameObjects.Container {
         this.sendToBack(child);
       }
     });
+
+    this.setSize(DEFAULT_WIDTH, 200);
+    Phaser.Display.Align.In.Center(
+      this,
+      this.scene.add.zone(
+        (this.width - this.length * 30) / 2,
+        DEFAULT_HEIGHT - 100,
+        DEFAULT_WIDTH,
+        this.height
+      )
+    );
   }
 
   generateKeyboard() {
