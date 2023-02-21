@@ -4,7 +4,7 @@ import scenes from '@scenes/index';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
-  backgroundColor: '#ffffff',
+  backgroundColor: '#DEDEDE',
   render: {
     pixelArt: true
   },
