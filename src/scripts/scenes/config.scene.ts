@@ -8,9 +8,7 @@ export class ConfigScene extends Phaser.Scene {
   }
 
   create() {
-    console.log('all', this.allDevices);
-
-    window.allDevices.forEach((device, index) => {
+    window.devices.forEach((device, index) => {
       const text = this.add
         .text(575, index * 100 + 100, '', {
           font: '64px Courier',
@@ -37,9 +35,5 @@ export class ConfigScene extends Phaser.Scene {
         this.scene.start('main-scene', { device });
       });
     });
-  }
-
-  update(): void {
-    // this.fpsText.update()
   }
 }
