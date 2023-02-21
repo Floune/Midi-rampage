@@ -1,8 +1,7 @@
 import PianoTouch from './PianoTouch';
 import { Notes } from './PianoTouch';
 export class Piano extends Phaser.GameObjects.Container {
-  keys: PianoTouch[];
-  grid: Phaser.GameObjects.GameObject[];
+  declare list: PianoTouch[] & Phaser.GameObjects.GameObject[];
   notes: Notes[] = [
     'C',
     'C#',
@@ -21,27 +20,40 @@ export class Piano extends Phaser.GameObjects.Container {
     super(scene, x, y);
     this.x = x;
     this.y = y;
-    this.scene = scene;
     scene.add.existing(this);
 
-    this.notes.forEach((value) => {
+    this.generateKeyboard();
+
+    this.list.forEach((key, index) => {
+      if (!key.sharp) {
+        const child = this.getAt(index);
+        this.sendToBack(child);
+      }
+    });
+
+    this.resetContainerOriginFromKeyboardSize();
+  }
+
+  generateKeyboard() {
+    let offset = 0;
+    const keyboard = this.notes.map((value) => {
       const isSharp = value.endsWith('#');
-      const key = new PianoTouch({
+
+      offset += isSharp ? 0 : 50;
+
+      return new PianoTouch({
         scene: this.scene,
-        x,
-        y,
+        x: isSharp ? offset + 35 : offset,
+        y: this.y,
         value,
         sharp: isSharp
       });
-      this.add(key);
     });
-    this.grid = Phaser.Actions.GridAlign(this.list, {
-      width: this.list.length,
-      height: 1,
-      cellWidth: 50,
-      position: Phaser.Display.Align.TOP_LEFT,
-      x: this.x,
-      y: this.y
-    });
+    this.add(keyboard);
+  }
+
+  resetContainerOriginFromKeyboardSize() {
+    this.x = 50 * this.length - 75;
+    this.y = this.y + 250;
   }
 }
