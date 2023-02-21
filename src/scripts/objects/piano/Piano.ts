@@ -34,19 +34,34 @@ export class Piano extends Phaser.GameObjects.Container {
 
   generateKeyboard() {
     let offset = 0;
-    const keyboard = this.notes.map((value) => {
+    const keyboard = this.notes.map((value, index) => {
       const isSharp = value.endsWith('#');
 
       offset += isSharp ? 0 : 50;
+      const octave = Math.floor(index / 12) + 3;
 
       return new PianoTouch({
         scene: this.scene,
         x: isSharp ? offset + 25 : offset,
         y: isSharp ? -25 : 0,
         value,
-        sharp: isSharp
+        sharp: isSharp,
+        octave
       });
     });
     this.add(keyboard);
+  }
+
+  getKey(note: number) {
+    const { octave, noteName } = this.parser(note);
+    return this.list.find(
+      (key) => key.value === noteName && key.octave === octave
+    );
+  }
+
+  parser(note: number) {
+    const octave = Math.floor(note / 12) - 1;
+    const noteName = this.notes[note % 12];
+    return { octave, noteName };
   }
 }
