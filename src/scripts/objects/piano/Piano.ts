@@ -18,7 +18,7 @@ export class Piano extends Phaser.GameObjects.Container {
   ];
   constructor({ scene, x, y }: { scene: Phaser.Scene; x: number; y: number }) {
     super(scene, x, y);
-    this.x = x;
+    this.x = x - 25;
     this.y = y;
     scene.add.existing(this);
 
@@ -30,8 +30,6 @@ export class Piano extends Phaser.GameObjects.Container {
         this.sendToBack(child);
       }
     });
-
-    this.resetContainerOriginFromKeyboardSize();
   }
 
   generateKeyboard() {
@@ -43,17 +41,12 @@ export class Piano extends Phaser.GameObjects.Container {
 
       return new PianoTouch({
         scene: this.scene,
-        x: isSharp ? offset + 35 : offset,
-        y: this.y,
+        x: isSharp ? offset + 25 : offset,
+        y: isSharp ? -25 : 0,
         value,
         sharp: isSharp
       });
     });
     this.add(keyboard);
-  }
-
-  resetContainerOriginFromKeyboardSize() {
-    this.x = 50 * this.length - 75;
-    this.y = this.y + 250;
   }
 }
