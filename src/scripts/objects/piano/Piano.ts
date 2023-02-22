@@ -1,7 +1,7 @@
 import PianoTouch from './PianoTouch';
 import { Notes } from './PianoTouch';
 import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@game/constants';
-import { Button } from '@objects/Buttons/Button';
+import { Button } from '@components/button/Button';
 type Synth = 'osc' | 'am' | 'fm' | 'poly';
 export class Piano extends Phaser.GameObjects.Container {
   declare list: PianoTouch[] & Phaser.GameObjects.GameObject[];
@@ -61,9 +61,7 @@ export class Piano extends Phaser.GameObjects.Container {
     );
 
     this.scene.sys.events.on('onButtonClick', this.setSynth.bind(this));
-    this.synthButtons
-      .find(({ value }) => value === this.synth)
-      ?.text.setBackgroundColor('#43a047');
+    this.synthButtons.find(({ value }) => value === this.synth)?.disable();
   }
 
   generateKeyboard() {
@@ -101,15 +99,11 @@ export class Piano extends Phaser.GameObjects.Container {
 
   setSynth({ data }) {
     this.synth = data;
-    // @TODO: Do it in the button directly
     this.synthButtons.forEach((button) => {
       if (button.value !== this.synth) {
-        button?.text.setBackgroundColor('#e53935');
-        button.setActive(true);
+        button.enable();
         return;
       }
-      button?.setActive(false);
-      button?.text.setBackgroundColor('#43a047');
     });
   }
 }
