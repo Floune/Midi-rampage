@@ -1,5 +1,5 @@
 import * as Tone from 'tone';
-import { Button } from '@objects/Buttons/Button';
+import { Button } from '@components/button/Button';
 import { DEFAULT_WIDTH } from '@constants';
 
 export class ConfigScene extends Phaser.Scene {
