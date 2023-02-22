@@ -1,10 +1,11 @@
-import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from './constants';
+import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@constants';
 
 import scenes from '@scenes/index';
+import MidiController from '@game/plugins/midi-controller';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
-  backgroundColor: '#ffffff',
+  backgroundColor: '#DEDEDE',
   render: {
     pixelArt: true
   },
@@ -12,13 +13,15 @@ const config: Phaser.Types.Core.GameConfig = {
   loader: {
     path: 'assets/'
   },
-  plugins: {},
+  plugins: {
+    scene: [MidiController]
+  },
   scale: {
     parent: 'phaser-game',
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: DEFAULT_HEIGHT,
-    height: DEFAULT_WIDTH
+    width: DEFAULT_WIDTH,
+    height: DEFAULT_HEIGHT
   },
   physics: {
     default: 'arcade',

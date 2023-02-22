@@ -11,7 +11,7 @@ export default defineConfig({
       '@scenes': resolve(__dirname, './src/scripts/scenes'),
       '@objects': resolve(__dirname, './src/scripts/objects'),
       '@utils': resolve(__dirname, './src/scripts/utils'),
-      '@decorators': resolve(__dirname, './src/scripts/decorators'),
+      '@components': resolve(__dirname, './src/scripts/components'),
       '@constants': resolve(__dirname, './src/scripts/constants.ts'),
       '@types': resolve(__dirname, './src/scripts/types.ts')
     }
