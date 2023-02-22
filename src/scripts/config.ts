@@ -1,6 +1,7 @@
-import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from './constants';
+import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@constants';
 
 import scenes from '@scenes/index';
+import MidiController from '@game/plugins/midi-controller';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -12,7 +13,9 @@ const config: Phaser.Types.Core.GameConfig = {
   loader: {
     path: 'assets/'
   },
-  plugins: {},
+  plugins: {
+    scene: [MidiController]
+  },
   scale: {
     parent: 'phaser-game',
     mode: Phaser.Scale.FIT,

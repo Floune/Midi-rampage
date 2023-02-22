@@ -2,6 +2,7 @@ import { MIDIValInput } from '@midival/core';
 import { FPSText } from '@objects/debug';
 import * as Tone from 'tone';
 import { Piano } from '@objects/piano';
+import { DEFAULT_WIDTH } from '@constants';
 
 type Synth = 'osc' | 'am' | 'fm' | 'poly';
 export class MainScene extends Phaser.Scene {
@@ -20,8 +21,16 @@ export class MainScene extends Phaser.Scene {
     super({ key: 'main-scene' });
   }
 
+  init() {
+    console.log('init');
+  }
+
+  prelaod() {
+    console.log('preload');
+  }
+
   async create(data) {
-    this.add.text(0, 0, 'main-scene', { color: '#000000' });
+    this.add.text(DEFAULT_WIDTH, 0, 'main-scene', { color: '#000000' });
     this.piano = new Piano({ scene: this, x: 0, y: 0 });
     this.fpsText = new FPSText(this);
 

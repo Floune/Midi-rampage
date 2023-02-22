@@ -12,6 +12,10 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create() {
+    this.add.text(0, 0, 'preload-scene', {
+      color: '#000000'
+    });
+
     this.scene.start('config-scene');
   }
 }
