@@ -1,56 +1,46 @@
 import * as Tone from 'tone';
+import { Button } from '@objects/Buttons/Button';
+import { DEFAULT_WIDTH } from '@constants';
 
 export class ConfigScene extends Phaser.Scene {
   fpsText: Phaser.GameObjects.Text;
-  buttons: Phaser.GameObjects.Text[];
+  buttons: Button[];
   constructor() {
     super({ key: 'config-scene' });
   }
-
   async create() {
     await this.midi_controller.start();
+    this.add
+      .text(DEFAULT_WIDTH / 2, 25, 'Select Your Device', {
+        color: '#000',
+        fontSize: '32px'
+      })
+      .setOrigin(0.5);
+
     this.events.on('device_connected', () => this.generateButtons());
     this.events.on('device_disconnected', ({ device }) =>
       this.removeDevicesButtons(device)
     );
+    this.events.on('onButtonClick', async ({ data }) => {
+      this.scene.start('main-scene', { device: data });
+      await Tone.start();
+    });
+
     this.add.text(0, 0, 'config-scene', { color: '#000000' });
     this.generateButtons();
   }
   generateButtons() {
-    this.buttons = this.midi_controller.devices.map((device, index) =>
-      this.deviceButton(device, index)
+    this.buttons = this.midi_controller.devices.map(
+      (device, index) =>
+        new Button({
+          scene: this.scene.scene,
+          x: DEFAULT_WIDTH / 2,
+          y: index * 100 + 100,
+          text: device.name,
+          data: device
+        })
     );
   }
-  deviceButton(device, index) {
-    const text = this.add
-      .text(575, index * 100 + 100, '', {
-        font: '64px Courier',
-        color: '#000'
-      })
-      .setInteractive();
-    text.setOrigin(0.5);
-    text.setText([device.name]);
-    text.on('pointerover', () => {
-      text.setTint(0xff00ff, 0xffff00, 0x00ff00, 0xff0000);
-    });
-
-    text.on('pointerout', () => {
-      text.clearTint();
-    });
-
-    text.on('pointerdown', () => {
-      text.setFontSize(66);
-    });
-
-    text.on('pointerup', async () => {
-      text.clearTint();
-      await Tone.start();
-      this.scene.start('main-scene', { device });
-    });
-
-    return text;
-  }
-
   removeDevicesButtons(device) {
     const deviceButton = this.buttons.find(
       (button) => button.text === device.name
