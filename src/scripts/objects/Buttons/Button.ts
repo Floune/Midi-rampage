@@ -9,9 +9,11 @@ type ButtonType = {
 export class Button extends Phaser.GameObjects.GameObject {
   background: Phaser.GameObjects.Graphics;
   text: Phaser.GameObjects.Text;
+  value: any;
   constructor({ scene, x, y, text, data }: ButtonType) {
     super(scene, 'button');
     this.scene.add.existing(this);
+    this.value = data;
 
     this.background = this.scene.add.graphics();
     this.background.fillStyle(0xe53935);
@@ -37,10 +39,12 @@ export class Button extends Phaser.GameObjects.GameObject {
     this.text.setInteractive();
 
     this.text.on('pointerover', () => {
+      if (!this.active) return;
       this.text.setBackgroundColor('#c62828');
     });
 
     this.text.on('pointerout', () => {
+      if (!this.active) return;
       this.text.setBackgroundColor('#e53935');
     });
 
