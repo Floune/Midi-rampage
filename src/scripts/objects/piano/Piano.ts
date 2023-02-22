@@ -1,6 +1,8 @@
 import PianoTouch from './PianoTouch';
 import { Notes } from './PianoTouch';
 import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@game/constants';
+import { Button } from '@objects/Buttons/Button';
+type Synth = 'osc' | 'am' | 'fm' | 'poly';
 export class Piano extends Phaser.GameObjects.Container {
   declare list: PianoTouch[] & Phaser.GameObjects.GameObject[];
   notes: Notes[] = [
@@ -17,12 +19,17 @@ export class Piano extends Phaser.GameObjects.Container {
     'A#',
     'B'
   ];
+
+  synths: Synth[] = ['osc', 'am', 'fm', 'poly'];
+  synth: Synth = 'osc';
+  synthButtons: Button[];
   constructor({ scene, x, y }: { scene: Phaser.Scene; x: number; y: number }) {
     super(scene, x, y);
     this.x = x - 25;
     this.y = y;
     scene.add.existing(this);
 
+    this.setSize(DEFAULT_WIDTH, 200);
     this.generateKeyboard();
 
     this.list.forEach((key, index) => {
@@ -32,7 +39,6 @@ export class Piano extends Phaser.GameObjects.Container {
       }
     });
 
-    this.setSize(DEFAULT_WIDTH, 200);
     Phaser.Display.Align.In.Center(
       this,
       this.scene.add.zone(
@@ -42,6 +48,22 @@ export class Piano extends Phaser.GameObjects.Container {
         this.height
       )
     );
+
+    this.synthButtons = this.synths.map(
+      (s, index) =>
+        new Button({
+          scene,
+          x: index * 70 + 50,
+          y: DEFAULT_HEIGHT - 250,
+          text: s,
+          data: s
+        })
+    );
+
+    this.scene.sys.events.on('onButtonClick', this.setSynth.bind(this));
+    this.synthButtons
+      .find(({ value }) => value === this.synth)
+      ?.text.setBackgroundColor('#43a047');
   }
 
   generateKeyboard() {
@@ -75,5 +97,19 @@ export class Piano extends Phaser.GameObjects.Container {
     const octave = Math.floor(note / 12) - 1;
     const noteName = this.notes[note % 12];
     return { octave, noteName };
+  }
+
+  setSynth({ data }) {
+    this.synth = data;
+    // @TODO: Do it in the button directly
+    this.synthButtons.forEach((button) => {
+      if (button.value !== this.synth) {
+        button?.text.setBackgroundColor('#e53935');
+        button.setActive(true);
+        return;
+      }
+      button?.setActive(false);
+      button?.text.setBackgroundColor('#43a047');
+    });
   }
 }
