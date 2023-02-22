@@ -118,4 +118,10 @@ export class Button extends Phaser.GameObjects.GameObject {
   handlePointerOut() {
     this.drawBackground(this.color.main);
   }
+
+  destroy(fromScene?: boolean) {
+    super.destroy(fromScene);
+    this.text.destroy();
+    this.background.destroy();
+  }
 }

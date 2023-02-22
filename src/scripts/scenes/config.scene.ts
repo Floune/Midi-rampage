@@ -42,9 +42,10 @@ export class ConfigScene extends Phaser.Scene {
     );
   }
   removeDevicesButtons(device) {
-    const deviceButton = this.buttons.find(
-      (button) => button.text === device.name
-    );
+    const deviceButton = this.buttons.find((button) => {
+      console.log(button.value.id, device.id);
+      return button.value.id === device.id;
+    });
     deviceButton?.destroy();
   }
 }
