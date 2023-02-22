@@ -23,6 +23,7 @@
       "@scenes/*" : ["scripts/scenes/*"],
       "@objects/*" : ["scripts/objects/*"],
       "@utils/*" : ["scripts/utils/*"],
+      "@components/*": ["scripts/components/*"],
       "@constants": ["scripts/constants.ts"],
       "@types": ["scripts/types.ts"]
     }
