@@ -62,44 +62,7 @@
   </head>
   <body>
     <div id="phaser-game"></div>
-    <div id="controls" class="closed">
-      <button id="close">X</button>
-      <button id="open">?</button>
-      
-      <div id="inner">
-        Synth
-        <div id="synth">
-          <button synth="osc">Osc</button>
-          <button synth="am">AM</button>
-          <button synth="fm">FM</button>
-          <button synth="poly">poly</button>
-        </div>
-
-      </div>
-    </div>
+    
     <script type="module" src="src/index.ts"></script>
-    <script>
-      const open = document.getElementById('open');
-      const close = document.getElementById('close');
-      const controls = document.getElementById('controls');
-      const controlsInner = document.getElementById('inner');
-      
-      open.addEventListener('click', () => {
-        controls.classList.remove('closed');
-        controls.classList.add('opened');
-        controlsInner.style.display = 'block';
-        open.style.display = 'none';
-        close.style.display = 'block';
-      });
-
-      close.addEventListener('click', () => {
-        controls.classList.remove('opened');
-        controls.classList.add('closed');
-        controlsInner.style.display = 'none';
-        open.style.display = 'block';
-        close.style.display = 'none';
-      });
-
-    </script>
   </body>
 </html>
