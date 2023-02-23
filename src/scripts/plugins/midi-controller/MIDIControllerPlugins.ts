@@ -1,8 +1,9 @@
-import { IMIDIAccess, IMIDIInput, MIDIVal } from '@midival/core';
+//import { IMIDIAccess, IMIDIInput, MIDIVal } from '@midival/core';
+import { WebMidi } from 'webmidi';
 
 export default class MIDIControllerPlugins extends Phaser.Plugins.ScenePlugin {
-  controller: IMIDIAccess;
-  devices: IMIDIInput[] = [];
+  controller: any;
+  devices: any[] = [];
   constructor(
     scene: Phaser.Scene,
     pluginManager: Phaser.Plugins.PluginManager,
@@ -11,11 +12,12 @@ export default class MIDIControllerPlugins extends Phaser.Plugins.ScenePlugin {
     super(scene, pluginManager, pluginKey);
   }
   async start() {
-    this.controller = await MIDIVal.connect();
+    this.controller = await WebMidi.enable();
+    //this.controller = await MIDIVal.connect();
     this.devices = this.controller.inputs;
-
     const events = this.systems.events;
     events.once('update', this.update, this);
+    debugger;
   }
 
   async update() {
@@ -23,12 +25,12 @@ export default class MIDIControllerPlugins extends Phaser.Plugins.ScenePlugin {
     this.controller.onInputConnected(this.addDevice.bind(this));
   }
 
-  addDevice(device: IMIDIInput) {
+  addDevice(device: any) {
     this.devices = [...this.devices, device];
     this.systems.events.emit('device_connected');
   }
 
-  removeDevice(device: IMIDIInput) {
+  removeDevice(device: any) {
     this.devices = this.devices.filter(({ id }) => id !== device.id);
     this.systems.events.emit('device_disconnected', {
       device: device
