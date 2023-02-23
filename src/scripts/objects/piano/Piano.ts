@@ -84,11 +84,8 @@ export class Piano extends Phaser.GameObjects.Container {
     this.add(keyboard);
   }
 
-  getKey(note: number) {
-    const { octave, noteName } = this.parser(note);
-    return this.list.find(
-      (key) => key.value === noteName && key.octave === octave
-    );
+  getKey(note: string) {
+    return this.list.find((key) => `${key.value}${key.octave}` === note);
   }
 
   parser(note: number) {

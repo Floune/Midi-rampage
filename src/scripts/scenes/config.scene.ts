@@ -10,6 +10,7 @@ export class ConfigScene extends Phaser.Scene {
   }
   async create() {
     await this.midi_controller.start();
+    console.log(this.midi_controller.devices);
     this.add
       .text(DEFAULT_WIDTH / 2, 25, 'Select Your Device', {
         color: '#000',
@@ -30,6 +31,7 @@ export class ConfigScene extends Phaser.Scene {
     this.generateButtons();
   }
   generateButtons() {
+    console.log(this.midi_controller.devices);
     this.buttons = this.midi_controller.devices.map(
       (device, index) =>
         new Button({

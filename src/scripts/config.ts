@@ -10,9 +10,6 @@ const config: Phaser.Types.Core.GameConfig = {
     pixelArt: true
   },
   scene: Object.values(scenes),
-  loader: {
-    path: 'assets/'
-  },
   plugins: {
     scene: [MidiController]
   },
@@ -24,10 +21,10 @@ const config: Phaser.Types.Core.GameConfig = {
     height: DEFAULT_HEIGHT
   },
   physics: {
-    default: 'arcade',
-    arcade: {
+    default: 'matter',
+    matter: {
       debug: true,
-      gravity: { y: 0 }
+      enableSleeping: true
     }
   }
 };
