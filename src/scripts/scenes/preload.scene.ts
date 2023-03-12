@@ -1,4 +1,6 @@
 import PianoKeyTexture from '@objects/piano/PianoKeyTexture';
+import MidiInputEngine from '../../utils/MidiInputEngine';
+import AudioDriver from '../plugins/audio-driver/AudioDriver.ts';
 
 export class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -16,6 +18,13 @@ export class PreloadScene extends Phaser.Scene {
       color: '#000000'
     });
 
-    this.scene.start('config-scene');
+    const midi = new MidiInputEngine();
+    const audio = new AudioDriver();
+    window.midiInputEngine = midi;
+    window.audioDriver = audio;
+
+    midi.start(() => {
+      this.scene.start('config-scene');
+    });
   }
 }

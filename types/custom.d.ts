@@ -18,5 +18,6 @@ declare module 'phaser' {
 declare global {
   interface Window {
     devices: IMIDIInput[];
+    midi_controller: MIDIControllerPlugins;
   }
 }

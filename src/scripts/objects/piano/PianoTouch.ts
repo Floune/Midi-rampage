@@ -34,16 +34,6 @@ export default class PianoTouch extends Phaser.GameObjects.Sprite {
     this._octave = octave;
 
     scene.add.existing(this);
-
-    this.setInteractive();
-    // @TODO: It's for tests to be deleted later
-    this.on('pointerover', () => {
-      this.setTint(0xa00101);
-    });
-
-    this.on('pointerout', () => {
-      this.clearTint();
-    });
   }
 
   get value(): Notes {

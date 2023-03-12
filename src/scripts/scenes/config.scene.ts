@@ -5,11 +5,12 @@ import { DEFAULT_WIDTH } from '@constants';
 export class ConfigScene extends Phaser.Scene {
   fpsText: Phaser.GameObjects.Text;
   buttons: Button[];
+  midi;
   constructor() {
     super({ key: 'config-scene' });
   }
   async create() {
-    await this.midi_controller.start();
+    this.midi = window.midiInputEngine;
     this.add
       .text(DEFAULT_WIDTH / 2, 25, 'Select Your Device', {
         color: '#000',
@@ -17,20 +18,23 @@ export class ConfigScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
+    /*
     this.events.on('device_connected', () => this.generateButtons());
     this.events.on('device_disconnected', ({ device }) =>
       this.removeDevicesButtons(device)
     );
+    */
     this.events.on('onButtonClick', async ({ data }) => {
-      this.scene.start('main-scene', { device: data });
+      this.midi.setDevice(data);
       await Tone.start();
+      this.scene.start('main-scene');
     });
-
     this.add.text(0, 0, 'config-scene', { color: '#000000' });
     this.generateButtons();
   }
-  generateButtons() {
-    this.buttons = this.midi_controller.devices.map(
+  async generateButtons() {
+    console.log(this.midi.devices);
+    this.buttons = this.midi.devices.map(
       (device, index) =>
         new Button({
           scene: this.scene.scene,

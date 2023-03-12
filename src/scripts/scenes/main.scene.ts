@@ -1,8 +1,9 @@
-import { MIDIValInput } from '@midival/core';
 import { FPSText } from '@objects/debug';
 import * as Tone from 'tone';
 import { Piano } from '@objects/piano';
 import { DEFAULT_WIDTH } from '@constants';
+import PianoTouch from '@game/objects/piano/PianoTouch';
+import { getKey, noteParser } from '../utils/midi.ts';
 export class MainScene extends Phaser.Scene {
   fpsText: Phaser.GameObjects.Text;
   noteText: Phaser.GameObjects.Text;
@@ -18,53 +19,30 @@ export class MainScene extends Phaser.Scene {
     super({ key: 'main-scene' });
   }
 
-  async create(data) {
+  async create() {
     this.add.text(DEFAULT_WIDTH, 0, 'main-scene', { color: '#000000' });
-    this.piano = new Piano({ scene: this, x: 0, y: 0 });
+    const piano = new Piano({ scene: this, x: 0, y: 0 });
     this.fpsText = new FPSText(this);
+    this.piano = piano;
+    this.midi = window.midiInputEngine;
+    this.audio = window.audioDriver;
 
-    this.synth = {
-      osc: new Tone.Synth().toDestination(),
-      am: new Tone.AMSynth().toDestination(),
-      fm: new Tone.FMSynth().toDestination(),
-      poly: new Tone.PolySynth(Tone.Synth).toDestination()
-    };
-
-    if (data.device) {
-      const input = new MIDIValInput(data.device);
-
-      input.onAllNoteOn((event) => {
-        const key = this.piano.getKey(event.note);
-        if (!key) return;
-
-        const name = key.value + key.octave;
-        this.synth[this.piano.synth].triggerAttackRelease(name, '8n');
-
-        this.history.push(name);
-
-        this.tweens.add({
-          targets: key,
-          alpha: 1,
-          duration: 100,
-          ease: 'Power1',
-          onStart: () => {
-            key.setTint(0xa00101);
-          },
-          onComplete: () => {
-            key.clearTint();
-          }
-        });
-      });
-    }
+    this.midi.inputHandler((event) => {
+      const {value, octave } = noteParser.parse(event);
+      this.audio.start(value, octave);
+      piano.animateTouch(value, octave, this.tweens);
+      
+      this.history.push(value);
+    });
 
     this.noteText = this.add.text(0, 50, 'hey', {
-      font: '64px Courier',
-      color: '#ffff00'
+      font: '20px Courier',
+      color: '#000000'
     });
   }
 
   update(): void {
     this.fpsText.update();
-    this.noteText?.setText([...this.history].slice(-10).reverse().join(' '));
+    this.noteText?.setText([...this.history].slice(-10).reverse().join("\n"));
   }
 }

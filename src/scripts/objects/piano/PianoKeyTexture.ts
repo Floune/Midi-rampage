@@ -10,8 +10,8 @@ export default class PianoKeyTexture extends Phaser.GameObjects.Graphics {
     super(scene, { ...options, x, y });
     ['piano_key_sharp', 'piano_key'].forEach((key) => {
       const sharpTexture = key.endsWith('sharp');
-      const tileWidth = sharpTexture ? 30 : 50;
-      const tileHeight = sharpTexture ? 150 : 200;
+      const tileWidth = sharpTexture ? 25 : 50;
+      const tileHeight = sharpTexture ? 110 : 200;
       const tileColor = sharpTexture ? 0x383838 : 0xffffff;
 
       this.fillStyle(tileColor, 1.0);

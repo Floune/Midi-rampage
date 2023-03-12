@@ -1,10 +1,11 @@
 import PianoTouch from './PianoTouch';
 import { Notes } from './PianoTouch';
 import { DEFAULT_HEIGHT, DEFAULT_WIDTH } from '@game/constants';
-import { Button } from '@components/button/Button';
-type Synth = 'osc' | 'am' | 'fm' | 'poly';
+
+
 export class Piano extends Phaser.GameObjects.Container {
   declare list: PianoTouch[] & Phaser.GameObjects.GameObject[];
+  octaves: number[] = [0, 1];
   notes: Notes[] = [
     'C',
     'C#',
@@ -20,9 +21,6 @@ export class Piano extends Phaser.GameObjects.Container {
     'B'
   ];
 
-  synths: Synth[] = ['osc', 'am', 'fm', 'poly'];
-  synth: Synth = 'osc';
-  synthButtons: Button[];
   constructor({ scene, x, y }: { scene: Phaser.Scene; x: number; y: number }) {
     super(scene, x, y);
     this.x = x - 25;
@@ -49,60 +47,42 @@ export class Piano extends Phaser.GameObjects.Container {
       )
     );
 
-    this.synthButtons = this.synths.map(
-      (s, index) =>
-        new Button({
-          scene,
-          x: index * 70 + 50,
-          y: DEFAULT_HEIGHT - 250,
-          text: s,
-          data: s
-        })
-    );
-
-    this.scene.sys.events.on('onButtonClick', this.setSynth.bind(this));
-    this.synthButtons.find(({ value }) => value === this.synth)?.disable();
   }
 
   generateKeyboard() {
     let offset = 0;
-    const keyboard = this.notes.map((value, index) => {
-      const isSharp = value.endsWith('#');
+    const keyboard = [...this.notes, ...this.notes, this.notes[0]].map(
+      (value, index) => {
+        const isSharp = value.endsWith('#');
 
-      offset += isSharp ? 0 : 50;
-      const octave = Math.floor(index / 12) + 3;
+        offset += isSharp ? 0 : 50;
+        const octave = Math.floor(index / 12) + 3;
 
-      return new PianoTouch({
-        scene: this.scene,
-        x: isSharp ? offset + 25 : offset,
-        y: isSharp ? -25 : 0,
-        value,
-        sharp: isSharp,
-        octave
-      });
-    });
+        return new PianoTouch({
+          scene: this.scene,
+          x: isSharp ? offset + 25 : offset,
+          y: isSharp ? -45 : 0,
+          value,
+          sharp: isSharp,
+          octave
+        });
+      }
+    );
     this.add(keyboard);
   }
 
-  getKey(note: number) {
-    const { octave, noteName } = this.parser(note);
-    return this.list.find(
-      (key) => key.value === noteName && key.octave === octave
-    );
-  }
-
-  parser(note: number) {
-    const octave = Math.floor(note / 12) - 1;
-    const noteName = this.notes[note % 12];
-    return { octave, noteName };
-  }
-
-  setSynth({ data }) {
-    this.synth = data;
-    this.synthButtons.forEach((button) => {
-      if (button.value !== this.synth) {
-        button.enable();
-        return;
+  animateTouch(note: number, octave, tweens) {
+    const target = this.list.find((key) => key.value === note && key.octave === octave);
+    tweens.add({
+      targets: target,
+      alpha: 1,
+      duration: 100,
+      ease: 'Power1',
+      onStart: () => {
+        target.setTint(0xa00001);
+      },
+      onComplete: () => {
+        target.clearTint();
       }
     });
   }
